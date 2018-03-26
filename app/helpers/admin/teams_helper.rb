@@ -5,15 +5,11 @@
 
 module Admin::TeamsHelper
   def number_of_groups
-    @team.groups.count
+    @team.groups_count
   end
 
   def number_of_accounts
-    accounts = 0
-    @team.groups.each do |group|
-      accounts += group.accounts.count
-    end
-    accounts
+    @team.accounts_count
   end
 
 end
