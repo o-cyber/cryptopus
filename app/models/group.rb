@@ -18,7 +18,7 @@
 #  https://github.com/puzzle/cryptopus.
 
 class Group < ApplicationRecord
-  belongs_to :team
+  belongs_to :team, counter_cache: true
   has_many :accounts, -> { order :accountname }, dependent: :destroy
 
   validates :name, presence: true

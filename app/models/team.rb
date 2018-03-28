@@ -18,7 +18,8 @@
 #  https://github.com/puzzle/cryptopus.
 
 class Team < ApplicationRecord
-  has_many :groups, -> { order :name }, dependent: :destroy
+  has_many :groups, -> { order :name }, counter_cache: :groups_count, dependent: :destroy
+  has_many :accounts, through: :groups, counter_cache: :accounts_count
   has_many :teammembers, dependent: :delete_all
   has_many :members, through: :teammembers, source: :user
 

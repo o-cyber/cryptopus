@@ -20,8 +20,8 @@
 #  https://github.com/puzzle/cryptopus.
 
 class Account < ApplicationRecord
-
   belongs_to :group
+  belongs_to :team, counter_cache: true
   has_many :items, dependent: :destroy
 
   validates :accountname, presence: true

@@ -76,8 +76,8 @@ ActiveRecord::Schema.define(version: 20180326132441) do
     t.datetime "updated_at", null: false
     t.boolean "visible", default: true, null: false
     t.boolean "private", default: false, null: false
-    t.integer "groups_count"
-    t.integer "accounts_count"
+    t.integer "groups_count", default: 0
+    t.integer "accounts_count", default: 0
   end
 
   create_table "users", force: :cascade do |t|
