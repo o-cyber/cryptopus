@@ -1,13 +1,14 @@
 version: '2'
 
 services:
-
-  cryptopus-mysql:
-    image: mysql:5.7
-    ports:
-      - '3306:3306'
+  cryptopus:
+    image: puzzle/cryptopus
+    container_name: cryptopus-sqlite
     environment:
-      - MYSQL_USER=cryptopus
-      - MYSQL_PASSWORD=cryptopus
-      - MYSQL_DATABASE=cryptopus_development
-      - MYSQL_ROOT_PASSWORD=cryptopus
+      SECRET_KEY_BASE: d7220ce1111af18af11c4d93897c74e283ec2d1c6dee93965fd8d9d104724720e281ed54486844551329faca574e99f509e19f9af6ff3455c88ed10337780ccf
+    ports:
+      - 8080:8080
+    volumes:
+      - cryptopus-sqlite:/opt/app-root/src/db
+volumes:
+  cryptopus-sqlite:
