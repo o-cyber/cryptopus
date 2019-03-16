@@ -10,6 +10,7 @@ module Flash
 
     def message
       return unless last_login_at
+
       @translation_key = :last_login_date
       @date_ip_country_values = { last_login_at: format_last_login_at }
 
@@ -52,7 +53,12 @@ module Flash
     def last_login_country
       ip_address = last_login_from
       return if ip_address.blank?
-      GeoIP.new('db/GeoIP.dat').country(ip_address).country_code2
+
+      geo_ip.country_code(ip_address)
+    end
+
+    def geo_ip
+      @geo_ip ||= GeoIp.new
     end
 
   end
