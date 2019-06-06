@@ -1,7 +1,7 @@
 language: ruby
 cache: bundler
 rvm:
- - 2.2
+ - 2.5
 branches:
  only:
   - master
@@ -9,6 +9,7 @@ branches:
 before_install:
  - sudo service mysql restart
 install:
+ - gem install bundler:1.17.3
  - bundle install --path vendor/bundle
 before_script:
  - bundle exec rake db:create
@@ -17,5 +18,5 @@ before_script:
  - bundle exec rake geo:fetch
 script:
  - bundle --deployment
+ - bundle exec brakeman
  - bundle exec rake ci --trace
-
