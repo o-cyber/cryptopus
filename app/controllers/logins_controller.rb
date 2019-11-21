@@ -14,7 +14,7 @@ class LoginsController < ApplicationController
   # caused problem with login form since the server side session is getting invalid after
   # configured timeout.
   skip_before_action :verify_authenticity_token, only: :authenticate
-  before_action :skip_authorization, only: %i[authenticate login logout]
+  before_action :skip_authorization, only: %i[authenticate login logout authenticate_keycloak]
 
   def login; end
 
@@ -30,7 +30,20 @@ class LoginsController < ApplicationController
 
     last_login_message
     check_password_strength
+    #cookies.permanent[:keycloak_token] = Keycloak::Client.get_token params[:username], params[:password]
+
+    #render plain: Keycloak::Client.user_signed_in?
     redirect_after_sucessful_login
+  end
+
+  def authenticate_keycloak
+    code = params[:code]
+    token = Keycloak::Client.get_token_by_code(code, '')
+    require 'pry'; binding.pry unless $pstop
+    render plain: 'keycloak login failed' unless Keycloak::Client.user_signed_in?
+    
+    cookies.permanent[:keycloak_token] = token
+    cryptopus_token = Keycloak::Client.get_attribute('cryptopus-token')
   end
 
   def logout
@@ -132,7 +145,9 @@ class LoginsController < ApplicationController
   def authenticator
     username = params[:username]
     password = params[:password]
-    Authentication::UserAuthenticator.new(username: username, password: password)
+    authenticator = Authentication::UserKeycloakAuthenticator.new(username: username, password: password)
+    authenticator.cookies = cookies
+    authenticator
   end
 
   def authorize_action

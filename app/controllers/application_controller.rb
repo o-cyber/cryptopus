@@ -10,7 +10,7 @@ require 'user' # fixes user.authenticate problem
 class ApplicationController < ActionController::Base
 
   before_action :set_sentry_request_context
-  before_action :validate_user, except: %i[login authenticate logout wizard]
+  before_action :validate_user, except: %i[login authenticate logout wizard authenticate_keycloak]
   before_action :message_if_fallback
   before_action :redirect_if_no_private_key, except: :logout
   before_action :prepare_menu
@@ -24,6 +24,14 @@ class ApplicationController < ActionController::Base
 
   # includes a security token
   protect_from_forgery with: :exception
+
+  def initialize
+    Keycloak.proc_cookie_token = lambda do
+      cookies.permanent[:keycloak_token]
+    end
+
+    super
+  end
 
   private
 
@@ -47,9 +55,14 @@ class ApplicationController < ActionController::Base
   end
 
   def check_if_user_logged_in
-    if current_user.nil?
-      session[:jumpto] = request.parameters
-      redirect_to login_login_path
+    if Keycloak::Client.user_signed_in?
+      if current_user.nil?
+        session[:jumpto] = request.parameters
+        redirect_to login_login_path
+      end
+    else
+      redirect_uri = 'http://localhost:3000/login/authenticate_keycloak'
+      redirect_to Keycloak::Client.url_login_redirect(redirect_uri, 'code')
     end
   end
 

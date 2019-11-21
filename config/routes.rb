@@ -60,6 +60,7 @@ Rails.application.routes.draw do
       get 'noaccess'
       post 'authenticate'
       post 'changelocale'
+      get 'authenticate_keycloak'
     end
 
     get 'wizard', to: 'wizard#index'

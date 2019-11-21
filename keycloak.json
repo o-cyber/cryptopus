@@ -1,0 +1,12 @@
+{
+  "realm": "techlab",
+  "auth-server-url": "http://keycloak:8180/auth",
+  "ssl-required": "false",
+  "resource": "cryptopus",
+  "verify-token-audience": true,
+  "credentials": {
+    "secret": "996fcea3-d404-4cde-99b7-8192f89fe162"
+  },
+  "confidential-port": 0,
+  "policy-enforcer": {}
+}

@@ -10,6 +10,10 @@ class LoginsPolicy < ApplicationPolicy
     user.nil?
   end
 
+  def authenticate_keycloak?
+    user.nil?
+  end
+
   def logout?
     user.present?
   end
