@@ -81,6 +81,7 @@ de:
     maintenance_tasks:
       index:
         title: Wartungsaufgaben
+        unavailable: Keine Wartungsaufgaben vorhanden
         maintenance_task: Wartungsaufgabe
         run: Ausführen
     settings:
@@ -88,6 +89,7 @@ de:
         title: Einstellungen bearbeiten
         save: Änderungen speichern
         ldap: Ldap Verbindung testen
+        whitelist_placeholder_geo_ip_deactivated: Falls keine IP's angegeben sind werden alle IP's erlaubt
     recryptrequests:
       index:
         title: Entschlüsselungs Anfragen
@@ -371,8 +373,8 @@ de:
         username: Benutzername
     errors:
       template:
-        body: 
-        header: 
+        body:
+        header:
       models:
         account:
           attributes:

@@ -24,7 +24,7 @@ class Authentication::SourceIpChecker
   end
 
   def ip_authorized?
-    private_ip? || ip_whitelisted? || country_authorized?
+    private_ip? || ip_whitelisted? || GeoIp.activated? && country_authorized?
   end
 
   def previously_authorized?(authorized_ip)
@@ -37,6 +37,7 @@ class Authentication::SourceIpChecker
 
   def ip_whitelisted?
     ip = IPAddr.new(remote_ip)
+    return true unless GeoIp.activated? || collect_whitelisted_ips.any?
 
     whitelisted_ips.any? { |i| i.include?(ip) }
   end
@@ -54,7 +55,7 @@ class Authentication::SourceIpChecker
   def country_authorized?
     country_code = geo_ip.country_code(remote_ip)
     country_code.present? &&
-      whitelisted_country_codes.include?(country_code)
+    whitelisted_country_codes.include?(country_code)
   end
 
   def whitelisted_country_codes
